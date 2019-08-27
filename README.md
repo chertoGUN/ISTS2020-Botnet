@@ -4,6 +4,12 @@ Botnet server and bot code for ISTS 20
 # Concept
 Each team is given the ip of a C2. They will be given a binary for a bot which they must start and distribute to other boxes throughout the competition. The goal is to have a bot on as many boxes as possible. Teams are scored on what percentage of the network they have bots on every half hour. 
 
+# Implementation Specs
++ Python Flask Server
++ SQLite Database Scoring 
++ Docker/Docker Compose
++ C/C++ Bots
+
 # Web App End-Points
 + Linux - `/<team>/<ip>/linux`
 + Windows - `/<team>/<ip>/windows`
