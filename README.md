@@ -22,6 +22,9 @@ Each team is given the ip of a C2. They will be given a binary for a bot which t
 + Admin end-point for getting a tally of each team's score - `/admin/score`
 + Reset round every half hour - `/admin/reset`
 + Add and remove points - `/admin/edit`
++ Set IPs - `/admin/sethosts`
++ Get IPs - `/admin/gethosts`
++ Optional: List which teams have which boxes - `/admin/getCallbacks`
 
 # Bot Features
 + Gather IP of the box it is put onto 
