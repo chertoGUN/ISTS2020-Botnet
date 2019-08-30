@@ -20,7 +20,7 @@ Each team is given the ip of a C2. They will be given a binary for a bot which t
 # Admin End-points 
 > Admin End-points requires admin token 
 + Admin end-point for getting a tally of each team's score - `/admin/score`
-+ Reset round every half hour - `/admin/reset`
++ Ends the round, resets the scores, and returns the most recent scores - `/admin/reset`
 + Add and remove points - `/admin/edit`
 + Set IPs - `/admin/sethosts`
 + Get IPs - `/admin/gethosts`
