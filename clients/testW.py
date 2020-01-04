@@ -28,7 +28,7 @@ def main():
     print("Running the process: ", end="")
     try:
         proc = subprocess.Popen(
-            "c:\'", stdin=subprocess.PIPE, stdout=subprocess.PIPE
+            "cmd.exe", stdin=subprocess.PIPE, stdout=subprocess.PIPE
         )
         stdout, stderr = proc.communicate(commands)
         proc.terminate()
