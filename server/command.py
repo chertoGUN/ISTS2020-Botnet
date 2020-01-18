@@ -31,11 +31,9 @@ class Command(object):
         self.id = str(uuid.uuid4())
 
         # This result value is what the output of the command is tested agaist
-        self.result = "".join(random.choice(string.ascii_lowercase) for i in range(30))
-
-        # the actual command that is to be run
-        # Defaults to echo for platform agnostic
-        self.command = "echo {}".format(self.result)
+        self.result = ""
+        # The actual command that is to be run
+        self.command = ""
 
     def __hash__(self):
         return self.id
@@ -65,7 +63,7 @@ class WindowsCommand(Command):
     """This class represents a Windows command object
 
     This will randomly choose a command that can be run and return it to the
-    bot.
+    bot. This class expacts powershell commands to be run
     """
     TYPE = "windows"
 
@@ -86,9 +84,14 @@ class WindowsCommand(Command):
         com()
 
     def _echo(self):
-        """This is a simple echo out of a random value. Since echo is the default
-        in the Command class, we dont need to do anything here"""
-        pass
+        """This is a simple echo out of a random value"""
+        self.result = "".join(random.choice(string.ascii_lowercase) for i in range(30))
+        self.command = "echo {}".format(self.result)
+
+    # TODO: Add these commands
+    # ps check for LSASS
+    # Check Users
+    # Check system32 files/folders
 
 class LinuxCommand(Command):
     """This class represents a linux command object
@@ -116,15 +119,17 @@ class LinuxCommand(Command):
         com()
 
     def _echo(self):
-        """This is a simple echo out of a random value. Since echo is the default
-        in the Command class, we dont need to do anything here"""
-        pass
+        """This is a simple echo out of a random value"""
+        self.result = "".join(random.choice(string.ascii_lowercase) for i in range(30))
+        self.command = "echo {}".format(self.result)
 
     def _base64(self):
         """This command sends the base64 string to the bot and expects the decoded reply
         
         e.x.  sh -c "echo aGk= | base64 -d"    ==>    "hi"
         """
+        # Generate a random result
+        self.result = "".join(random.choice(string.ascii_lowercase) for i in range(30))
         # Base 64 the random result
         base_encoded = base64.standard_b64encode(self.result.encode("utf-8")).decode()
         # Set the command that is to be run
@@ -137,6 +142,8 @@ class LinuxCommand(Command):
 
         TODO: This is broken, but not really requried
         """
+        # Generate a random result
+        self.result = "".join(random.choice(string.ascii_lowercase) for i in range(30))
         # Create the hex values for the string
         printf = [hex(ord(i)).replace("0x", "\\x") for i in self.result]
         self.command = "printf '{}\\n'".format("".join(printf))
@@ -148,6 +155,11 @@ class LinuxCommand(Command):
         """
         self.command = "sh -c 'ip a | grep -o {}'".format(self.ip)
         self.result = self.ip
+    
+    # TODO:  Add more commands
+    # Uname
+    # Check Users
+    # Maybe Root
 
 
 def main():
