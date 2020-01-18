@@ -54,6 +54,7 @@ class BotnetAdmin(object):
             BotnetAdminError("An invalid request was sent to the server")
         elif resp.status_code in (403, 401):
             BotnetAdminError("You are not authorized to call this API function")
+        print(resp)
         raise BotnetAdminError("Invald response code: {}".format(resp.status_code))
     
     def getscore(self):
@@ -67,3 +68,7 @@ class BotnetAdmin(object):
     def gethosts(self):
         """Get all the hosts that are allowed to call back"""
         return self._send("get", {})
+    
+    def sethosts(self, hosts):
+        """Set all the hosts that are allowed to call back"""
+        return self._send("post", {"hosts": hosts})

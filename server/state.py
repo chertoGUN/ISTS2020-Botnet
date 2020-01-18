@@ -8,33 +8,14 @@ import time
 import hashlib
 import binascii
 
-from .command import Command
+from .command import generateCommand
 
 DEFAULT_TOKEN = os.environ.get("ADMIN_TOKEN", "adminadmin")
 
 # Hosts for testing, can be anything
-TESTING_HOSTS = [
-    "10.80.100.1",
-    "10.80.100.6",
-    "10.80.100.11",
-    "10.80.100.16",
-    "10.80.100.21",
-    "10.80.100.26",
-    "10.80.100.31",
-    "10.80.100.36",
-    "10.80.100.41",
-    "10.80.100.46",
-    "10.80.100.51",
-    "10.80.100.56",
-    "10.80.100.61",
-    "10.80.100.66",
-    "10.80.100.71",
-    "10.80.100.76",
-    "10.80.100.81",
-    "10.80.100.86",
-    "10.80.100.91",
-    "10.80.100.96",
-]
+TESTING_HOSTS = {
+    "192.168.177.195": "linux"
+}
 
 
 class State(object):
@@ -48,7 +29,7 @@ class State(object):
         self.starttime = time.time()
         self.scores = {}
         self.valid_teams = []
-        self.hosts = set(TESTING_HOSTS)
+        self._hosts = TESTING_HOSTS
         self.commands = {}
 
         # If we dont have an admin token, create one
@@ -69,35 +50,67 @@ class State(object):
         self.starttime = time.time()
         return retval
 
+    def getHosts(self):
+        """Get the valid hosts"""
+        return self._hosts
+    
+    def setHosts(self, hosts):
+        """Set the valid hosts here
+        TODO: Maybe validate that the hosts are legit or something?
+        """
+        self._hosts = hosts
+
     def getCommands(self, team, ip):
         """
-        Get commands for a host to run
+        Get commands for a host to run. Returns the following JSON
+        {
+            "id": 2818355651907523309,
+            "command": "echo cvikkoyquvlrvnkpkntbultvxkmwnp",
+            "type": "linux",
+        }
         """
-        if ip not in self.hosts:
-            raise ValueError("Invalid IP address")
+        if ip not in self._hosts:
+            raise ValueError("unknown IP address: {}".format(ip))
         team = str(team)
         if self.valid_teams and team not in self.valid_teams:
-            raise ValueError("Invalid team")
+            raise ValueError("unknown team: {}".format(team))
 
         # Generate a command for the bot to run
-        com = Command(team + ip)
-        print(com)
-        self.commands[team + ip] = com
-        return com
+        host_type = self._hosts[ip]
+        com = generateCommand(host_type, team, ip)
+        # Store the command for later
+        self.commands[com.id] = com
+        return com.json()
 
-    def checkResults(self, team, ip, results):
-        if team + ip not in self.commands:
+    def checkResults(self, com_id, results):
+        """When a bot calls back with results, see if they are right
+        """
+        print(self.commands)
+        command = self.commands.get(com_id, None)
+        if not command:
             raise ValueError("No command for id {}".format(command))
 
-        self.commands[team + ip].check(results)
-        # If an error has occured, it should be caught in the checkin function
+        # This function will ValueError if the reults are wrong
+        command.check(results)
+
         # If we get here, no errors have been raised the results were valid
-        if team not in self.scores:
-            self.scores[team] = {}
-        self.scores[team][ip] = time.time()
-        return True
+        if command.team not in self.scores:
+            self.scores[command.team] = {}
+        
+        timestamp = time.time()
+        # Mark this host as valid
+        self.scores[command.team][command.ip] = timestamp
+
+        return {
+            "id":com_id,
+            "msg": "successful check in",
+            "ip": command.ip,
+            "time": timestamp
+        }
+
 
     def isadmin(self, token):
+        """Check if the given token is an administrator"""
         return hash_token(token.strip()) == self.ADMIN_TOKEN
 
     @property
@@ -106,7 +119,7 @@ class State(object):
         retval = {
             "round_start": self.starttime,
             "scores": self.scores.copy(),
-            "host_count": len(self.hosts),
+            "host_count": len(self._hosts),
         }
         return retval
 
@@ -115,7 +128,7 @@ class State(object):
         """Non admin state which just shows how many hosts a team has"""
         retval = {
             "round_start": self.starttime,
-            "host_count": len(self.hosts),
+            "host_count": len(self._hosts),
             "scores": {},
         }
         for team, hosts in self.scores.items():

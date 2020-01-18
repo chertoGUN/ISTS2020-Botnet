@@ -47,7 +47,7 @@ def getHosts():
     """Show all the hosts that are allowed to callback"""
     checkadmin()
     state = app.config["state"]
-    return jsonify({"hosts": state.hosts})
+    return jsonify({"hosts": state.getHosts()})
 
 
 @app.route("/admin/sethosts", methods=["POST"])
@@ -59,7 +59,10 @@ def setHosts():
 
     {
         "auth-token": "asdas"
-        "hosts": ["8.8.8.8", "8.8.4.4"]
+        "hosts": {
+            "8.8.8.8": "linux",
+            "8.8.4.4": "windows"
+        }
     }
     """
     checkadmin()
@@ -67,5 +70,7 @@ def setHosts():
     # Get the new hosts
     hosts = request.get_json(force=True).get('hosts')
     if not hosts:
-        return jsonify(["error": "Invalid 'hosts' fields set"]), 400
-    return jsonify({"hosts": state.hosts})
+        return jsonify({"error": "Invalid 'hosts' fields set"}), 400
+    
+    state.setHosts(hosts)
+    return jsonify({"hosts": state.getHosts()})
