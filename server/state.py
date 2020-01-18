@@ -10,7 +10,7 @@ import binascii
 
 from .command import Command
 
-DEFAULT_TOKEN = "WHITETEAMSAYSHI"
+DEFAULT_TOKEN = os.environ.get("ADMIN_TOKEN", "adminadmin")
 
 # Hosts for testing, can be anything
 TESTING_HOSTS = [

@@ -12,19 +12,24 @@ from . import app
 
 def checkadmin():
     """This is a decorator that makes sure the caller has an ADMIN_TOKEN"""
-    token = request.headers.get("ADMIN_TOKEN", "")
-    if not token or not app.config["state"].isadmin(token):
-        abort(401, "Invalid ADMIN token")
+    try:
+        token = request.get_json(force=True).get("auth-token", "")
+        if token and app.config["state"].isadmin(token):
+            return True
+    except Exception as E:
+        print(type(E), E)
+
+    abort(401, "Invalid ADMIN token")
 
 
-@app.route("/admin/score")
+@app.route("/admin/getscore")
 def getScore():
     checkadmin()
     state = app.config["state"]
     return jsonify(state.state_admin)
 
 
-@app.route("/admin/reset")
+@app.route("/admin/reset", methods=["POST"])
 def resetScore():
     checkadmin()
     state = app.config["state"]
@@ -39,11 +44,28 @@ def editScore():
 
 @app.route("/admin/gethosts")
 def getHosts():
-    # TODO
-    pass
+    """Show all the hosts that are allowed to callback"""
+    checkadmin()
+    state = app.config["state"]
+    return jsonify({"hosts": state.hosts})
 
 
-@app.route("/admin/sethosts")
+@app.route("/admin/sethosts", methods=["POST"])
 def setHosts():
-    # TODO
-    pass
+    """Set the valid hosts for the application
+    
+    Example:
+    POST /admin/sethosts
+
+    {
+        "auth-token": "asdas"
+        "hosts": ["8.8.8.8", "8.8.4.4"]
+    }
+    """
+    checkadmin()
+    state = app.config["state"]
+    # Get the new hosts
+    hosts = request.get_json(force=True).get('hosts')
+    if not hosts:
+        return jsonify(["error": "Invalid 'hosts' fields set"]), 400
+    return jsonify({"hosts": state.hosts})
