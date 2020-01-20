@@ -77,11 +77,9 @@ class WindowsCommand(Command):
         commands = [
             self._echo,
             self._checkAlpha, self._checkPhantom, self._checkVoodoo,
-            self._lsass
+            self._lsass,
+            self._drivers
 
-
-
-            # TODO: Like the LinuxCommand object, think of windows commands to run
         ]
 
         # Choose a random function to run
@@ -112,6 +110,10 @@ class WindowsCommand(Command):
     def _lsass(self):
         self.result = "ProcessName\n----\nlsass"
         self.command = "get-process lsass |select ProcessName".format(self.result)
+    
+    def _drivers(self):
+        self.result = "True"
+        self.command = "Test-Path \'C:\Windows\system32\drivers\'"
  
     # TODO: Add these commands
     # Check system32 files/folders
