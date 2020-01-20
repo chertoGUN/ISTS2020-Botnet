@@ -4,7 +4,7 @@ import string
 import base64
 import uuid
 
-def generateCommand(type_, team, ip):
+def generateCommand(type_, team, ip, user):
     """Return a new command object of the given type"""
 
     command_types = {
@@ -12,7 +12,7 @@ def generateCommand(type_, team, ip):
         "windows": WindowsCommand
     }
     retval = command_types.get(type_, Command)
-    return retval(team, ip)
+    return retval(team, ip, user)
 
 class Command(object):
     """An object the represents a basic command.
@@ -21,13 +21,14 @@ class Command(object):
 
     TYPE = "generic/unknown"
 
-    def __init__(self, team, ip):
+    def __init__(self, team, ip, user):
         """
         Generate a command for the team/ip combo
         """
         self.ip = ip
         self.team = team
         self.time = time.time()  # The time that the command was issued
+        self.user = user
         self.id = str(uuid.uuid4())
 
         # This result value is what the output of the command is tested agaist
@@ -47,7 +48,8 @@ class Command(object):
             "command": self.command,
             "ip": self.ip,
             "team": self.team,
-            "type": self.TYPE
+            "type": self.TYPE,
+            "user": self.user
         }
 
     def check(self, text):
@@ -67,9 +69,9 @@ class WindowsCommand(Command):
     """
     TYPE = "windows"
 
-    def __init__(self, team, ip):
+    def __init__(self, team, ip, user):
         # Call the supers init function
-        super().__init__(team, ip)
+        super().__init__(team, ip, user)
         
         # All the different options for the commands
         commands = [
@@ -101,9 +103,9 @@ class LinuxCommand(Command):
     """
     TYPE = "linux"
 
-    def __init__(self, team, ip):
+    def __init__(self, team, ip, user):
         # Call the supers init function
-        super().__init__(team, ip)
+        super().__init__(team, ip, user)
         
         # All the different options for the commands
         commands = [
