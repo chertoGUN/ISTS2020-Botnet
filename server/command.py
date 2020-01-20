@@ -76,6 +76,10 @@ class WindowsCommand(Command):
         # All the different options for the commands
         commands = [
             self._echo,
+            self._checkAlpha, self._checkPhantom, self._checkVoodoo,
+            self._lsass
+
+
 
             # TODO: Like the LinuxCommand object, think of windows commands to run
         ]
@@ -104,9 +108,12 @@ class WindowsCommand(Command):
         """This makes sure specific users are present"""
         self.result = "Name\n----\nphantom"
         self.command = "Get-LocalUser -Name \"phantom\" | select Name".format(self.result)
+    
+    def _lsass(self):
+        self.result = "ProcessName\n----\nlsass"
+        self.command = "get-process lsass |select ProcessName".format(self.result)
+ 
     # TODO: Add these commands
-    # ps check for LSASS
-    # Check Users
     # Check system32 files/folders
 
 class LinuxCommand(Command):
