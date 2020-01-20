@@ -78,7 +78,8 @@ class WindowsCommand(Command):
             self._echo,
             self._checkAlpha, self._checkPhantom, self._checkVoodoo,
             self._lsass,
-            self._drivers
+            self._drivers,
+            self._ipa
 
         ]
 
@@ -86,6 +87,13 @@ class WindowsCommand(Command):
         com = random.choice(commands)
         # Run the function
         com()
+    def _ipa(self):
+        """Check that they arent lying about the IP address
+
+        Commented out by default because systems might not have ipa
+        """
+        self.command = "Get-NetIPAddress -AddressFamily IPv4 | select ipaddress {}'".format(self.ip)
+        self.result = self.ip
 
     def _echo(self):
         """This is a simple echo out of a random value"""
