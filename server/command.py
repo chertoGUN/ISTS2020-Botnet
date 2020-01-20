@@ -89,7 +89,21 @@ class WindowsCommand(Command):
         """This is a simple echo out of a random value"""
         self.result = "".join(random.choice(string.ascii_lowercase) for i in range(30))
         self.command = "echo {}".format(self.result)
+    
+    def _checkAlpha(self):
+            """This makes sure specific users are present"""
+            self.result = "Name\n----\nalpha"
+            self.command = "Get-LocalUser -Name \"alpha\" | select Name".format(self.result)
 
+    def _checkVoodoo(self):
+        """This makes sure specific users are present"""
+        self.result = "Name\n----\nvoodoo"
+        self.command = "Get-LocalUser -Name \"voodoo\" | select Name".format(self.result)
+
+    def _checkPhantom(self):
+        """This makes sure specific users are present"""
+        self.result = "Name\n----\nphantom"
+        self.command = "Get-LocalUser -Name \"phantom\" | select Name".format(self.result)
     # TODO: Add these commands
     # ps check for LSASS
     # Check Users
