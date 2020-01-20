@@ -13,6 +13,7 @@ def get_commands():
     {
         "team": "10",
         "ip": "8.8.8.8",
+        "user": "root"
     }
 
     Returns:
@@ -40,7 +41,11 @@ def get_commands():
         if not ip:
             raise ValueError("'ip' not specified")
 
-        return jsonify(state.getCommands(team, ip))
+        user = data.get("user", False)
+        if not user:
+            raise ValueError("'user' not specified")
+
+        return jsonify(state.getCommands(team, ip, user))
 
     except ValueError as E:
         return jsonify({"error": str(E)}), 400
@@ -81,19 +86,3 @@ def return_results():
     except ValueError as E:
         print(E)
         return jsonify({"error": str(E)}), 400
-
-@app.route("/<team>/<ip>", methods=["GET", "POST"])
-def callbackLinux(team, ip):
-    state = app.config["state"]
-    if request.method == "POST":
-        results = request.data.decode("utf-8")
-        state.checkResults(team, ip, results)
-        return "Success"
-    else:
-        return jsonify(data.getCommands(team, ip))
-
-
-@app.route("/<team>/<ip>/windows")
-def callbackWindows(team, ip):
-    # TODO: replicate the windows callback after updating the linux callback
-    pass

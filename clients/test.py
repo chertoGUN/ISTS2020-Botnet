@@ -22,6 +22,7 @@ def main():
     data = {
         "team": team,
         "ip": ip,
+        "user": "www-data"
     }
     jprint(data)
     resp = requests.get(server + "/callback", json=data).json()

@@ -60,7 +60,7 @@ class State(object):
         """
         self._hosts = hosts
 
-    def getCommands(self, team, ip):
+    def getCommands(self, team, ip, user):
         """
         Get commands for a host to run. Returns the following JSON
         {
@@ -77,7 +77,7 @@ class State(object):
 
         # Generate a command for the bot to run
         host_type = self._hosts[ip]
-        com = generateCommand(host_type, team, ip)
+        com = generateCommand(host_type, team, ip, user)
         # Store the command for later
         self.commands[com.id] = com
         return com.json()

@@ -16,7 +16,7 @@ def index():
     results = ""
 
     for team, count in state["scores"].items():
-        results += "Team {}: {}/{}\n".format(team, count, total)
+        results += "Team {}: {}/{}\n<br>".format(team, count, total)
 
     print(results)
     return results
