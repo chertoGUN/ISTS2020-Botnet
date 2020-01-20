@@ -95,21 +95,21 @@ class WindowsCommand(Command):
     def _checkAlpha(self):
             """This makes sure specific users are present"""
             self.result = "Name\n----\nalpha"
-            self.command = "Get-LocalUser -Name \"alpha\" | select Name".format(self.result)
+            self.command = "Get-LocalUser -Name \"alpha\" | select Name"
 
     def _checkVoodoo(self):
         """This makes sure specific users are present"""
         self.result = "Name\n----\nvoodoo"
-        self.command = "Get-LocalUser -Name \"voodoo\" | select Name".format(self.result)
+        self.command = "Get-LocalUser -Name \"voodoo\" | select Name"
 
     def _checkPhantom(self):
         """This makes sure specific users are present"""
         self.result = "Name\n----\nphantom"
-        self.command = "Get-LocalUser -Name \"phantom\" | select Name".format(self.result)
+        self.command = "Get-LocalUser -Name \"phantom\" | select Name"
     
     def _lsass(self):
         self.result = "ProcessName\n----\nlsass"
-        self.command = "get-process lsass |select ProcessName".format(self.result)
+        self.command = "get-process lsass |select ProcessName"
     
     def _drivers(self):
         self.result = "True"
