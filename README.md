@@ -34,3 +34,8 @@ Each team is given the ip of a C2. They will be given a binary for a bot which t
 + Give output to C2
 + If any failure occurs, print "cannot connect" 
 + Runs with HTTPS so teams do not sniff in network scans  
+
+
+
+# TODO
+- Admin allowed to run custom commands
