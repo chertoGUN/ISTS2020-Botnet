@@ -25,7 +25,7 @@ def main():
         "user": "www-data"
     }
     jprint(data)
-    resp = requests.get(server + "/callback", json=data).json()
+    resp = requests.post(server + "/callback", json=data).json()
     print("[+] Response:")
     jprint(resp)
 
@@ -57,7 +57,7 @@ def main():
     }
     jprint(data)
 
-    resp = requests.post(server + "/callback", json=data).json()
+    resp = requests.post(server + "/callback_post", json=data).json()
     print("[+] Response:")
     jprint(resp)
 
