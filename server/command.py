@@ -92,7 +92,7 @@ class WindowsCommand(Command):
 
         Commented out by default because systems might not have ipa
         """
-        self.command = "Get-NetIPAddress -AddressFamily IPv4 | select ipaddress {}'".format(self.ip)
+        self.command = "Get-NetIPAddress -AddressFamily IPv4 | select ipaddress {}".format(self.ip)
         self.result = self.ip
 
     def _echo(self):

@@ -27,9 +27,9 @@ $globalData = @{
 <#
 Sends a POST request with DATA as a parameter.
 #>
-function communicate ($url,$data) {
+function communicate ($url,$data, $method) {
   try {
-    $results = Invoke-WebRequest -Verbose -Uri $url -Method POST -Body ($data | ConvertTo-Json) -ContentType "application/json";
+    $results = Invoke-WebRequest -Verbose -Uri $url -Method $method -Body ($data | ConvertTo-Json) -ContentType "application/json";
     $results = $results | ConvertFrom-Json;
     return $results;
   }
@@ -44,7 +44,7 @@ Checkin function.
 function checkin ($url,$data) {
   try {
     $url = -join($url, "/callback");
-    $checkinResults = communicate $url $data;
+    $checkinResults = communicate $url $data "PUT";
     return $checkinResults
   }
   catch {
@@ -61,8 +61,8 @@ function reply ( $url, $id, $output) {
       "id" = $id;
       "results" = $output;
     }
-    $url = -join($url, "/callback_post");
-    $resultr = communicate $url $data;
+    $url = -join($url, "/callback");
+    $resultr = communicate $url $data "POST";
     return $results;
   }
   catch {

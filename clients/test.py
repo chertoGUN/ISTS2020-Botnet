@@ -14,7 +14,7 @@ def jprint(data):
 
 def main():
     server = "http://localhost:5000"
-    ip = "10.3.3.10"
+    ip = "127.0.0.1"
     team = "5"
 
     print("[*] GET to {}/callback:".format(server))
@@ -29,12 +29,12 @@ def main():
     print("[+] Response:")
     jprint(resp)
 
-    if "printf" in resp['command']:
-        print(resp['command'])
+
     if "error" in resp:
         print("[!]", resp["error"])
         quit(1)
-
+    if "printf" in resp['command']:
+        print(resp['command'])
     # Run the commands
     print("[*] Running the process...")
     try:

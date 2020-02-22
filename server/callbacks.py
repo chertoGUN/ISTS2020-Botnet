@@ -40,6 +40,15 @@ def get_commands():
         ip = data.get("ip", False)
         if not ip:
             raise ValueError("'ip' not specified")
+        
+        # Validate that they arent faking the ips
+        if request.headers.getlist("X-Forwarded-For"):
+            real_ip = request.headers.getlist("X-Forwarded-For")[0]
+        else:
+            real_ip = request.remote_addr
+        
+        if real_ip != ip:
+            raise ValueError("specified ip does not match incoming request ip '{}'".format(real_ip))
 
         user = data.get("user", False)
         if not user:
@@ -50,7 +59,7 @@ def get_commands():
     except ValueError as E:
         return jsonify({"error": str(E)}), 400
 
-@app.route("/callback_post", methods=["POST"])
+@app.route("/callback", methods=["POST"])
 def return_results():
     """Expects a JSON object of the following format:
     {
@@ -71,6 +80,7 @@ def return_results():
         "error": "random error message"
     }
     """
+    
     state = app.config["state"]
     data = request.get_json(force=True)
     try:
@@ -78,9 +88,9 @@ def return_results():
         if not com_id:
             raise ValueError("'id' not specified")
         results = data.get("results", False)
-        if not results:
+        if results is False:
             raise ValueError("'results' not specified")
-
+        results = str(results)
         return jsonify(state.checkResults(com_id, results))
 
     except ValueError as E:
