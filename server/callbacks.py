@@ -50,7 +50,7 @@ def get_commands():
     except ValueError as E:
         return jsonify({"error": str(E)}), 400
 
-@app.route("/callback", methods=["POST"])
+@app.route("/callback_post", methods=["POST"])
 def return_results():
     """Expects a JSON object of the following format:
     {
