@@ -76,23 +76,54 @@ class WindowsCommand(Command):
         # All the different options for the commands
         commands = [
             self._echo,
+            self._checkAlpha, self._checkPhantom, self._checkVoodoo,
+            self._lsass,
+            self._drivers,
+            self._ipa
 
-            # TODO: Like the LinuxCommand object, think of windows commands to run
         ]
 
         # Choose a random function to run
         com = random.choice(commands)
         # Run the function
         com()
+    def _ipa(self):
+        """Check that they arent lying about the IP address
+
+        Commented out by default because systems might not have ipa
+        """
+        self.command = "Get-NetIPAddress -AddressFamily IPv4 | select ipaddress {}".format(self.ip)
+        self.result = self.ip
 
     def _echo(self):
         """This is a simple echo out of a random value"""
         self.result = "".join(random.choice(string.ascii_lowercase) for i in range(30))
         self.command = "echo {}".format(self.result)
+    
+    def _checkAlpha(self):
+            """This makes sure specific users are present"""
+            self.result = "Name\n----\nalpha"
+            self.command = "Get-LocalUser -Name \"alpha\" | select Name"
 
+    def _checkVoodoo(self):
+        """This makes sure specific users are present"""
+        self.result = "Name\n----\nvoodoo"
+        self.command = "Get-LocalUser -Name \"voodoo\" | select Name"
+
+    def _checkPhantom(self):
+        """This makes sure specific users are present"""
+        self.result = "Name\n----\nphantom"
+        self.command = "Get-LocalUser -Name \"phantom\" | select Name"
+    
+    def _lsass(self):
+        self.result = "ProcessName\n----\nlsass"
+        self.command = "get-process lsass |select ProcessName"
+    
+    def _drivers(self):
+        self.result = "True"
+        self.command = "Test-Path \'C:\Windows\system32\drivers\'"
+ 
     # TODO: Add these commands
-    # ps check for LSASS
-    # Check Users
     # Check system32 files/folders
 
 class LinuxCommand(Command):
@@ -112,7 +143,7 @@ class LinuxCommand(Command):
             self._echo,
             self._base64,
             #self._printf,
-            #self._ipa,
+            self._ipa,
         ]
 
         # Choose a random function to run

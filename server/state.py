@@ -5,12 +5,15 @@ The state object keeps track of the scores and hosts that are allowed in the bot
 
 import os
 import time
+import json
 import hashlib
 import binascii
 
 from .command import generateCommand
 
 DEFAULT_TOKEN = os.environ.get("ADMIN_TOKEN", "adminadmin")
+HOST_FILE = os.environ.get("HOST_FILE", "known_hosts.json")
+
 
 # Hosts for testing, can be anything
 TESTING_HOSTS = {
@@ -29,7 +32,12 @@ class State(object):
         self.starttime = time.time()
         self.scores = {}
         self.valid_teams = []
-        self._hosts = TESTING_HOSTS
+        if os.path.exists(HOST_FILE):
+            with open(HOST_FILE) as fil:
+                self._hosts = json.load(fil)
+        else:
+            self._hosts = TESTING_HOSTS
+
         self.commands = {}
 
         # If we dont have an admin token, create one

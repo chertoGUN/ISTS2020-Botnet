@@ -13,8 +13,8 @@ def jprint(data):
     print(string)
 
 def main():
-    server = "http://127.0.0.1:5000"
-    ip = "192.168.177.195"
+    server = "http://localhost:5000"
+    ip = "127.0.0.1"
     team = "5"
 
     print("[*] GET to {}/callback:".format(server))
@@ -25,16 +25,16 @@ def main():
         "user": "www-data"
     }
     jprint(data)
-    resp = requests.post(server + "/callback", json=data).json()
+    resp = requests.get(server + "/callback", json=data).json()
     print("[+] Response:")
     jprint(resp)
 
-    if "printf" in resp['command']:
-        print(resp['command'])
+
     if "error" in resp:
         print("[!]", resp["error"])
         quit(1)
-
+    if "printf" in resp['command']:
+        print(resp['command'])
     # Run the commands
     print("[*] Running the process...")
     try:
@@ -57,7 +57,7 @@ def main():
     }
     jprint(data)
 
-    resp = requests.post(server + "/callback_post", json=data).json()
+    resp = requests.post(server + "/callback", json=data).json()
     print("[+] Response:")
     jprint(resp)
 
