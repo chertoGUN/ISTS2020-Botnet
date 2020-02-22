@@ -1,0 +1,106 @@
+{
+    "name": "ISTS2020",
+    "date": "2/28/20",
+    "teams": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+    ],
+    "networks": [
+        {
+            "ip": "10.x.1",
+            "name": "LAN",
+            "hosts": [
+                {
+                    "ip": "10",
+                    "name": "acidburn",
+                    "os": "Parrot OS"
+                },
+                {
+                    "ip": "20",
+                    "name": "viral",
+                    "os": "Debian 10"
+                },
+                {
+                    "ip": "30",
+                    "name": "lordnikon",
+                    "os": "Win Server 2019"
+                },
+                {
+                    "ip": "40",
+                    "name": "cerealkiller",
+                    "os": "Win 10"
+                },
+                {
+                    "ip": "50",
+                    "name": "zerocool",
+                    "os": "Win 10"
+                },
+                {
+                    "ip": "254",
+                    "name": "cptcrunch",
+                    "os": "CentOS"
+                }
+            ]
+        },
+        {
+            "ip": "10.x.2",
+            "name": "Dev Cloud",
+            "hosts": [
+                {
+                    "ip": "10",
+                    "name": "pwnsauce",
+                    "os": "Fedora 30"
+                },
+                {
+                    "ip": "20",
+                    "name": "theplague",
+                    "os": "React OS (Windows)"
+                },
+                {
+                    "ip": "30",
+                    "name": "anarchaos",
+                    "os": "Ubuntu 18.04"
+                }
+            ]
+        },
+        {
+            "ip": "10.x.3",
+            "name": "Prod Cloud",
+            "hosts": [
+                {
+                    "ip": "10",
+                    "name": "topiary",
+                    "os": "Win Server 2019"
+                },
+                {
+                    "ip": "20",
+                    "name": "sabu",
+                    "os": "Win Server 2019"
+                },
+                {
+                    "ip": "30",
+                    "name": "kayla",
+                    "os": "CentOS 7"
+                },
+                {
+                    "ip": "40",
+                    "name": "avunit",
+                    "os": "Debian 9"
+                },
+                {
+                    "ip": "50",
+                    "name": "tflow",
+                    "os": "CentOS 7"
+                }
+            ]
+        }
+    ]
+}

@@ -7,7 +7,7 @@ TODO: Implement these functions
 from flask import request, render_template, jsonify
 from . import app
 
-@app.route("/callback", methods=["GET"])
+@app.route("/callback", methods=["GET", 'PUT'])
 def get_commands():
     """Expects a JSON object of the following format:
     {
