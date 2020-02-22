@@ -143,7 +143,7 @@ class LinuxCommand(Command):
             self._echo,
             self._base64,
             #self._printf,
-            #self._ipa,
+            self._ipa,
         ]
 
         # Choose a random function to run

@@ -13,8 +13,8 @@ def jprint(data):
     print(string)
 
 def main():
-    server = "http://127.0.0.1:5000"
-    ip = "192.168.177.195"
+    server = "http://localhost:5000"
+    ip = "10.3.3.10"
     team = "5"
 
     print("[*] GET to {}/callback:".format(server))
