@@ -24,7 +24,6 @@ def checkadmin():
 
 @app.route("/admin/getscore")
 def getScore():
-    checkadmin()
     state = app.config["state"]
     return jsonify(state.state_admin)
 
