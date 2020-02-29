@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script>
+window.onload = function() {
+{% for team in state['scores'] %}
+var score = {{ state['scores'][team] }};
+var left = {{ state['host_count'] }}-score;
+var team = "{{ team }}";
+if (Number("{{ team }}")) {
+	team = "Team " + team
+}
+var chart = new CanvasJS.Chart("chartContainer_{{ team }}", {
+	animationEnabled: true,
+	title: {
+		text: team
+	},
+	data: [{
+		type: "pie",
+		startAngle: 240,
+		//yValueFormatString: "##0.00\"%\"",
+		indexLabel: "{label} {y}   ",
+		dataPoints: [
+			{y: score, label: "Callback Count", color: "#c0504e"},
+			{y: left, label: "", color: "#f0f0f0"}
+		]
+	}]
+});
+chart.render();
+{% endfor %}
+
+}
+</script>
+</head>
+<style>
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 10px;
+  width: 100%;
+}
+</style>
+<body>
+<div class="wrapper">
+	{% for team in state['scores'] %}
+	<div id="chartContainer_{{ team }}" style="height: 300px; width: auto;"></div>
+	{% endfor %}
+</div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>
