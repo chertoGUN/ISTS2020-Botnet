@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/picatz/i2bn/client"
@@ -44,12 +45,12 @@ func main() {
 
 	for ; ; time.Sleep(3 * time.Second) {
 		go func() {
-			log.Println("Making client request")
+			log.Println("Making client request!!")
 			// c2 ip + url
 			c2IP := "172.16.0.56"
-			c2URL := fmt.Sprintf("http://%v:5000/callback", c2IP)
+			c2URL := fmt.Sprintf("http://%v:80/callback", c2IP)
 			// get them points
-			log.Printf("trying to score %v with %v", ip, c2URL)
+			log.Printf("trying to score %v with %v", strings.Split(ip, "/")[0], c2URL)
 			err := client.GetDemPoints(context.Background(), c2URL, ip, "red", "root")
 			if err != nil {
 				panic(err)
