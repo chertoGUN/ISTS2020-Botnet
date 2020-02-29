@@ -93,7 +93,7 @@ class State(object):
     def checkResults(self, com_id, results):
         """When a bot calls back with results, see if they are right
         """
-        print(self.commands)
+        #print(self.commands)
         command = self.commands.get(com_id, None)
         if not command:
             raise ValueError("No command for id {}".format(command))

