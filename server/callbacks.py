@@ -47,8 +47,8 @@ def get_commands():
             raise ValueError("'ip' not specified")
         
         # Validate that they arent faking the ips
-        if ip not in request.access_route:
-            raise ValueError("specified ip does not match incoming request ip '{}'".format(real_ip))
+        if ip not in request.access_route:  
+            raise ValueError("specified ip does not match incoming request ip '{}'".format(request.remote_addr))
 
         user = data.get("user", False)
         if not user:
